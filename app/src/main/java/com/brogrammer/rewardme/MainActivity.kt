@@ -26,6 +26,7 @@ import com.brogrammer.rewardme.ui.customerdetails.AddPointsScreen
 import com.brogrammer.rewardme.ui.customerdetails.CashOutScreen
 import com.brogrammer.rewardme.ui.home.HomeScreen
 import com.brogrammer.rewardme.ui.report.ReportScreen
+import com.brogrammer.rewardme.ui.settings.ConversionRatesScreen
 import com.brogrammer.rewardme.ui.settings.SettingsScreen
 import com.brogrammer.rewardme.ui.theme.RewardMeTheme
 
@@ -61,7 +62,6 @@ fun Navigation(navController: NavHostController) {
     NavHost(navController, startDestination = "home") {
         composable("home") { HomeScreen() }
         composable("report") { ReportScreen() }
-        composable("settings") { SettingsScreen() }
         composable("customers") { CustomersScreen(navController = navController) }
         composable("add_customer") { AddCustomerScreen(navController = navController) }
         composable("customer_details/{customerId}") { backStackEntry ->
@@ -78,6 +78,9 @@ fun Navigation(navController: NavHostController) {
             val customerId = backStackEntry.arguments?.getString("customerId")?.toInt() ?: 0
             CashOutScreen(navController = navController, customerId = customerId)
         }
+
+        composable("settings") { SettingsScreen(navController = navController) }
+        composable("conversion_rates") { ConversionRatesScreen(navController = navController) }
 
 
     }

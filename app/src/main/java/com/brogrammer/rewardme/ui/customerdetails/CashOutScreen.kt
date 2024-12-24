@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -18,6 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.brogrammer.rewardme.data.model.Transaction
 import com.brogrammer.rewardme.viewModel.CustomerViewModel
+import com.brogrammer.rewardme.viewModel.SettingsViewModel
 import com.brogrammer.rewardme.viewModel.TransactionViewModel
 import java.util.Date
 
@@ -26,10 +28,17 @@ fun CashOutScreen(
     navController: NavController,
     customerId: Int,
     customerViewModel: CustomerViewModel = viewModel(),
-    transactionViewModel: TransactionViewModel = viewModel()
+    transactionViewModel: TransactionViewModel = viewModel(),
+    settingsViewModel: SettingsViewModel = viewModel()
 ) {
+
+    val conversionRate by settingsViewModel.conversionRate.observeAsState()
+
    var pointsToRedeem by remember { mutableStateOf("") }
    var description by remember { mutableStateOf("") }
+    var money by remember {
+        mutableStateOf(0f)
+    }
 
    Column(
        modifier = Modifier
@@ -39,7 +48,11 @@ fun CashOutScreen(
 
        TextField(
            value = pointsToRedeem,
-           onValueChange = { pointsToRedeem = it },
+           onValueChange = {
+               pointsToRedeem = it
+               val points = pointsToRedeem.toIntOrNull() ?: 0
+               money = points * (conversionRate?.pointsToMoneyRate ?: 0.1f)
+            },
            label = { Text("Points to Redeem") },
            modifier = Modifier
                .fillMaxWidth()
@@ -55,9 +68,15 @@ fun CashOutScreen(
                .padding(bottom = 8.dp)
        )
 
+       Text(
+           text = "Equivalent Money: $money",
+           modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
+       )
+
        Button(
            onClick = {
            val points = pointsToRedeem.toIntOrNull() ?: 0
+//               money = points * (conversionRate?.pointsToMoneyRate ?: 0.1f)
                val transaction = Transaction(
                    customerId = customerId,
                    date = Date(),
