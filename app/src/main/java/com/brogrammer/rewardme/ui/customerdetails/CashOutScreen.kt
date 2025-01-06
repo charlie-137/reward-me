@@ -52,6 +52,8 @@ fun CashOutScreen(
         mutableStateOf(0f)
     }
 
+    val balancePoints by customerViewModel.getPointsByCustomerId(customerId).observeAsState(0)
+
    Column(
        modifier = Modifier
            .fillMaxSize()
@@ -115,7 +117,9 @@ fun CashOutScreen(
 
        Text(
            text = "Equivalent Money: $money",
-           modifier = Modifier.fillMaxWidth().padding(start = 32.dp, bottom = 16.dp)
+           modifier = Modifier
+               .fillMaxWidth()
+               .padding(start = 32.dp, bottom = 16.dp)
        )
 
 
@@ -129,17 +133,27 @@ fun CashOutScreen(
                    ).show()
                } else {
                    val points = pointsToRedeem.toIntOrNull() ?: 0
-//               money = points * (conversionRate?.pointsToMoneyRate ?: 0.1f)
-                   val transaction = Transaction(
-                       customerId = customerId,
-                       date = Date(),
-                       type = "Redeem",
-                       points = -points,
-                       description = description
-                   )
-                   transactionViewModel.insert(transaction)
-                   customerViewModel.updatePoints(customerId, -points)
-                   navController.popBackStack()
+//                   val balancePoints = customerViewModel.getPointsByCustomerId(customerId)
+                   if(balancePoints < points) {
+                       Toast.makeText(
+                           context,
+                           "Not Sufficient Points to Redeem",
+                           Toast.LENGTH_SHORT
+                       ).show()
+                   } else {
+                       //               money = points * (conversionRate?.pointsToMoneyRate ?: 0.1f)
+                       val transaction = Transaction(
+                           customerId = customerId,
+                           date = Date(),
+                           type = "Redeem",
+                           points = -points,
+                           description = description
+                       )
+                       transactionViewModel.insert(transaction)
+                       customerViewModel.updatePoints(customerId, -points)
+                       navController.popBackStack()
+                   }
+
                }
            },
            modifier = Modifier

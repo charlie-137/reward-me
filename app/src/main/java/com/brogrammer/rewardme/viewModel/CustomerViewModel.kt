@@ -44,5 +44,10 @@ class CustomerViewModel(application: Application) : AndroidViewModel(application
     }
 
 
+    fun getPointsByCustomerId(customerId: Int): LiveData<Int> {
+        return repository.getPointsByCustomerId(customerId)
+    }
+
+
 
 }

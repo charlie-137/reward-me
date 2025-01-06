@@ -1,5 +1,6 @@
 package com.brogrammer.rewardme.ui.customerdetails
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,11 +28,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -51,8 +55,12 @@ fun CustomerDetailsScreen(
     customerViewModel: CustomerViewModel = viewModel(),
     transactionViewModel: TransactionViewModel = viewModel()
 ) {
+    val context = LocalContext.current
     val customer = customerViewModel.getCustomerById(customerId).observeAsState()
     val transactions = transactionViewModel.getTransactionsByCustomerId(customerId).observeAsState(listOf())
+
+    val expandedTransactionIndex = remember { mutableStateOf(-1) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -262,7 +270,40 @@ fun CustomerDetailsScreen(
                         .fillMaxSize()
                 ) {
                     items(sortedTransactions) { transaction ->
-                        TransactionCard(transaction = transaction)
+
+                        val index = sortedTransactions.indexOf(transaction)
+
+                        val isFirstTransaction = index == 0
+
+                        TransactionCard(
+                            transaction = transaction,
+                            isExpanded = expandedTransactionIndex.value == index,
+                            onCardClick = {
+                                if(isFirstTransaction){
+                                    expandedTransactionIndex.value = if (expandedTransactionIndex.value == index) -1 else index
+                                }
+                            },
+                            showUndoButton = isFirstTransaction && expandedTransactionIndex.value == index,
+                            onUndo = {
+                                transactionViewModel.delete(transaction)
+                                if(transaction.type == "Add") {
+//                                    Toast.makeText(
+//                                        context,
+//                                        "Add: Original - ${transaction.type} Points: ${transaction.points}",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+                                    customerViewModel.updatePoints(customerId, -transaction.points)
+                                } else if (transaction.type == "Redeem") {
+//                                    Toast.makeText(
+//                                        context,
+//                                        "Redeem: Original - ${transaction.type} Points: ${transaction.points}",
+//                                        Toast.LENGTH_SHORT
+//                                    ).show()
+                                    customerViewModel.updatePoints(customerId, -transaction.points)
+                                }
+                            }
+
+                        )
                         Spacer(modifier = Modifier.height(8.dp))
                     }
                 }
@@ -275,11 +316,18 @@ fun CustomerDetailsScreen(
 
 
 @Composable
-fun TransactionCard(transaction: Transaction) {
+fun TransactionCard(
+    transaction: Transaction,
+    isExpanded: Boolean,
+    onCardClick: () -> Unit,
+    showUndoButton: Boolean,
+    onUndo: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 4.dp),
+            .padding(horizontal = 4.dp)
+            .clickable { onCardClick() },
         shape = RoundedCornerShape(8.dp),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
@@ -324,6 +372,27 @@ fun TransactionCard(transaction: Transaction) {
                     color = MaterialTheme.colorScheme.primary
                 )
             }
+
+            if(isExpanded) {
+                Spacer(modifier = Modifier.height(8.dp))
+                if (showUndoButton) {
+                    Button(
+                        onClick = onUndo,
+                        modifier = Modifier
+                            .padding(top = 8.dp)
+                            .align(Alignment.End),
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFF44336))
+                    ){
+                        Text(
+                            text = "Undo",
+                            fontSize = 12.sp
+                        )
+                    }
+                }
+            }
+
         }
     }
 }
+

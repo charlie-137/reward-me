@@ -27,4 +27,8 @@ class CustomerRepository(private val customerDao: CustomerDao) {
         customerDao.updatePoints(customerId, points)
     }
 
+    fun getPointsByCustomerId(customerId: Int): LiveData<Int> {
+        return customerDao.getPointsByCustomerId(customerId)
+    }
+
 }

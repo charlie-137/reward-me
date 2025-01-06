@@ -29,4 +29,8 @@ interface CustomerDao {
     @Query("UPDATE customers SET points = points + :points Where id = :customerId")
     suspend fun updatePoints(customerId: Int, points: Int)
 
+    @Query("SELECT points FROM customers WHERE id = :customerId")
+    fun getPointsByCustomerId(customerId: Int): LiveData<Int>
+
+
 }

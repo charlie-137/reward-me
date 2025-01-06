@@ -21,3 +21,4 @@ class TransactionRepository(private val transactionDao: TransactionDao) {
         transactionDao.deleteTransaction(transaction)
     }
 }
+
