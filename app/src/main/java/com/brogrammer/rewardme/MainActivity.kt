@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import com.brogrammer.rewardme.ui.customerdetails.CustomerDetailsScreen
@@ -21,6 +22,7 @@ import com.brogrammer.rewardme.ui.customers.AddCustomerScreen
 import com.brogrammer.rewardme.ui.customers.CustomersScreen
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.brogrammer.rewardme.ui.components.BottomNavigationBar
 import com.brogrammer.rewardme.ui.customerdetails.AddPointsScreen
 import com.brogrammer.rewardme.ui.customerdetails.CashOutScreen
@@ -59,11 +61,25 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun Navigation(navController: NavHostController) {
-    NavHost(navController, startDestination = "home") {
+    NavHost(navController, startDestination = "customers") {
         composable("home") { HomeScreen() }
         composable("report") { ReportScreen() }
         composable("customers") { CustomersScreen(navController = navController) }
-        composable("add_customer") { AddCustomerScreen(navController = navController) }
+//        composable("add_customer") { AddCustomerScreen(navController = navController) }
+
+
+        composable("add_customer?customerId={customerId}", arguments = listOf(
+            navArgument("customerId") {
+                type = NavType.IntType
+                defaultValue = -1
+            }
+        )) { backStackEntry ->
+            val customerId = backStackEntry.arguments?.getInt("customerId") ?: -1
+            AddCustomerScreen(navController = navController, customerId = customerId)
+        }
+
+
+
         composable("customer_details/{customerId}") { backStackEntry ->
             val customerId = backStackEntry.arguments?.getString("customerId")?.toInt() ?: 0
             CustomerDetailsScreen(navController = navController, customerId = customerId)
