@@ -100,7 +100,8 @@ fun AddCustomerScreen(
         NumberBox(
             placeHolder = "Enter Contact Number",
             text = contactNumber,
-            onTextChange = { contactNumber = it }
+            onTextChange = { contactNumber = it },
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(8.dp))

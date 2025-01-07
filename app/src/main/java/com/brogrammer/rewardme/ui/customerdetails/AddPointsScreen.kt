@@ -78,7 +78,8 @@ fun AddPointsScreen(navController: NavController,
                 amount = it
                 val money = amount.toFloatOrNull() ?: 0f
                 points = money * (conversionRate?.moneyToPointsRate ?: 10f)
-            }
+            },
+            modifier = Modifier.fillMaxWidth()
         )
 
         Spacer(modifier = Modifier.height(8.dp))

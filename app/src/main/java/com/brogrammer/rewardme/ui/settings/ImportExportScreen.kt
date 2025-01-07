@@ -69,11 +69,27 @@ fun ImportExportScreen(
 
     Column(modifier = Modifier
         .fillMaxSize()
-        .padding(16.dp)) {
+        .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+
+        // TextView
         Text(
-            "Export/Import Database",
-            style = MaterialTheme.typography.bodyMedium
+            text = "EXPORT/IMPORT DATABASE",
+            fontSize = 20.sp,
+            color = Color(0xFF2389DA),
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .padding(bottom = 16.dp, top = 32.dp)
+                .align(Alignment.CenterHorizontally)
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+//        Text(
+//            "Export/Import Database",
+//            style = MaterialTheme.typography.bodyMedium
+//        )
 
 
         Button(
@@ -82,45 +98,124 @@ fun ImportExportScreen(
                     exportDatabaseToJson(context)
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .size(width = 100.dp, height = 54.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF74CCF4), // Background color
+//                contentColor = Color(0xFF707070) // Text color
+            )
         ) {
-            Text(text = "Export Database", fontWeight = FontWeight.Bold)
+//            Text(text = "Export Database", fontWeight = FontWeight.Bold)
+            Text(
+                text = "Export Database",
+                color = Color(0xFF707070),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp
+            )
         }
 
+
+        Spacer(modifier = Modifier.height(32.dp))
+//        Spacer(modifier = Modifier.height(8.dp))
 
 
         Button(
             onClick = {
                 filePickerLauncher.launch ("application/json")
             },
-            modifier = Modifier.fillMaxWidth()
+//            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .size(width = 100.dp, height = 54.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF74CCF4), // Background color
+//                contentColor = Color(0xFF707070) // Text color
+            )
         ) {
-            Text(text = "Select File", fontWeight = FontWeight.Bold)
+//            Text(text = "Select File", fontWeight = FontWeight.Bold)
+            Text(
+                text = "Select File",
+                color = Color(0xFF707070),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp
+            )
         }
+
+
+//        Text(
+//            "Selected File: $selectedFileName",
+//            style = MaterialTheme.typography.bodySmall
+//        )
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            "Selected File: $selectedFileName",
-            style = MaterialTheme.typography.bodySmall
+            text = "Selected File: $selectedFileName",
+            modifier = Modifier
+//                .fillMaxWidth()
+                .padding(bottom = 16.dp)
+                .align(Alignment.CenterHorizontally),
+            style = MaterialTheme.typography.bodyMedium
         )
 
+
         Button(
+
             onClick = {
-                selectedFileUri?.let { uri ->
-                    importing = true
-                    coroutineScope.launch {
-                        importDatabaseFromJson(context, uri)
-                        importing = false
-                        Toast.makeText(context, "Database imported successfully!", Toast.LENGTH_SHORT).show()
+
+                when {
+                    selectedFileUri == null -> {
+                        Toast.makeText(context, "Please select a file first.", Toast.LENGTH_SHORT).show()
+                    }
+                    !selectedFileName.endsWith(".json", ignoreCase = true) -> {
+                        Toast.makeText(context, "Please select a valid Database file.", Toast.LENGTH_SHORT).show()
+                    }
+                    else -> {
+                        importing = true
+                        coroutineScope.launch {
+                            importDatabaseFromJson(context, selectedFileUri!!)
+                            importing = false
+                            Toast.makeText(context, "Database imported successfully!", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
+
             },
-            modifier = Modifier.fillMaxWidth(),
+
+//            onClick = {
+//                selectedFileUri?.let { uri ->
+//                    importing = true
+//                    coroutineScope.launch {
+//                        importDatabaseFromJson(context, uri)
+//                        importing = false
+//                        Toast.makeText(context, "Database imported successfully!", Toast.LENGTH_SHORT).show()
+//                    }
+//                }
+//            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .size(width = 100.dp, height = 54.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF74CCF4), // Background color
+//                contentColor = Color(0xFF707070) // Text color
+            ),
+//            modifier = Modifier.fillMaxWidth(),
             enabled = !importing
         ) {
-            Text("Import Database")
+//            Text("Import Database")
+            Text(
+                text = "Import Database",
+                color = Color(0xFF707070),
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 16.sp
+            )
         }
 
-        // Optionally, you can add another button for importing data if necessary.
+
+
+
+
     }
 
 }

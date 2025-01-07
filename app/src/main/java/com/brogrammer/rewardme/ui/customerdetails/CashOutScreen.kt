@@ -92,7 +92,8 @@ fun CashOutScreen(
                pointsToRedeem = it
                val points = pointsToRedeem.toIntOrNull() ?: 0
                money = points * (conversionRate?.pointsToMoneyRate ?: 0.1f)
-           }
+           },
+           modifier = Modifier.fillMaxWidth()
        )
 
        Spacer(modifier = Modifier.height(8.dp))

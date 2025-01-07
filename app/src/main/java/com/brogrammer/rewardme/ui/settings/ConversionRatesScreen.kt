@@ -1,13 +1,17 @@
 package com.brogrammer.rewardme.ui.settings
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -22,11 +26,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.brogrammer.rewardme.R
 import com.brogrammer.rewardme.data.model.ConversionRate
 import com.brogrammer.rewardme.ui.components.NumberBox
 import com.brogrammer.rewardme.ui.components.TextBox
@@ -48,7 +54,8 @@ fun ConversionRatesScreen(
     Column (
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
         // TextView
@@ -58,30 +65,73 @@ fun ConversionRatesScreen(
             color = Color(0xFF2389DA),
             fontWeight = FontWeight.Bold,
             modifier = Modifier
-                .padding(bottom = 16.dp, top = 32.dp)
+                .padding(top = 32.dp)
                 .align(Alignment.CenterHorizontally)
         )
 
+        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+
         Text(
             text = "Money to Points Conversion",
-            modifier = Modifier.padding(start = 32.dp, bottom = 8.dp)
+//            modifier = Modifier.padding(start = 32.dp, bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp)
         )
 
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+//                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
 
-        NumberBox(
-            placeHolder = "Money",
-            text = moneyForPoints,
-            onTextChange = { moneyForPoints = it }
-        )
+            NumberBox(
+                placeHolder = "Money",
+                text = moneyForPoints,
+                onTextChange = { moneyForPoints = it },
+                modifier = Modifier.weight(1f)
+            )
 
-        Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.exchange),
+                contentDescription = "Exchange Logo",
+                modifier = Modifier.size(24.dp)
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            NumberBox(
+                placeHolder = "Points",
+                text = pointsForMoneyToPoints,
+                onTextChange = { pointsForMoneyToPoints = it },
+                modifier = Modifier.weight(1f)
+            )
 
 
-        NumberBox(
-            placeHolder = "Points",
-            text = pointsForMoneyToPoints,
-            onTextChange = { pointsForMoneyToPoints = it }
-        )
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+
+//        NumberBox(
+//            placeHolder = "Money",
+//            text = moneyForPoints,
+//            onTextChange = { moneyForPoints = it },
+//            modifier = Modifier.fillMaxWidth()
+//        )
+//
+//        Spacer(modifier = Modifier.height(8.dp))
+//
+//
+//        NumberBox(
+//            placeHolder = "Points",
+//            text = pointsForMoneyToPoints,
+//            onTextChange = { pointsForMoneyToPoints = it },
+//            modifier = Modifier.fillMaxWidth()
+//        )
 
         Spacer(modifier = Modifier.height(8.dp))
         Spacer(modifier = Modifier.height(8.dp))
@@ -110,23 +160,60 @@ fun ConversionRatesScreen(
 
         Text(
             text = "Points to Money Conversion",
-            modifier = Modifier.padding(start = 32.dp, bottom = 8.dp)
+//            modifier = Modifier.padding(start = 32.dp, bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp)
         )
 
 
-        NumberBox(
-            placeHolder = "Points",
-            text = pointsForMoney,
-            onTextChange = { pointsForMoney = it }
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+//                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
 
-        Spacer(modifier = Modifier.height(8.dp))
+            NumberBox(
+                placeHolder = "Points",
+                text = pointsForMoney,
+                onTextChange = { pointsForMoney = it },
+                modifier = Modifier.weight(1f)
+            )
 
-        NumberBox(
-            placeHolder = "Money",
-            text = moneyForPointsToMoney,
-            onTextChange = { moneyForPointsToMoney = it }
-        )
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Image(
+                painter = painterResource(id = R.drawable.exchange),
+                contentDescription = "Exchange Logo",
+                modifier = Modifier.size(24.dp)
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            NumberBox(
+                placeHolder = "Money",
+                text = moneyForPointsToMoney,
+                onTextChange = { moneyForPointsToMoney = it },
+                modifier = Modifier.weight(1f)
+            )
+
+
+        }
+
+
+//        NumberBox(
+//            placeHolder = "Points",
+//            text = pointsForMoney,
+//            onTextChange = { pointsForMoney = it }
+//        )
+//
+//        Spacer(modifier = Modifier.height(8.dp))
+//
+//        NumberBox(
+//            placeHolder = "Money",
+//            text = moneyForPointsToMoney,
+//            onTextChange = { moneyForPointsToMoney = it }
+//        )
 
 
 //        TextField(
@@ -149,8 +236,8 @@ fun ConversionRatesScreen(
 //
 //        )
 
-        Spacer(modifier = Modifier.height(8.dp))
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             onClick = {

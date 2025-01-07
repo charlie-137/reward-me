@@ -34,7 +34,12 @@ import androidx.compose.ui.unit.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NumberBox(placeHolder: String, text: String, onTextChange: (String) -> Unit) {
+fun NumberBox(
+    placeHolder: String,
+    text: String,
+    onTextChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
 
     // State to manage whether the TextField is focused
     var isFocused by rememberSaveable {
@@ -45,8 +50,8 @@ fun NumberBox(placeHolder: String, text: String, onTextChange: (String) -> Unit)
     val borderColor = if (isFocused) Color(0xFF2389DA) else Color(0xFF74CCF4)
 
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
+        modifier = modifier
+//            .fillMaxWidth()
             .height(54.dp)
             .clip(RoundedCornerShape(24.dp))
             .background(Color.White)
@@ -71,7 +76,8 @@ fun NumberBox(placeHolder: String, text: String, onTextChange: (String) -> Unit)
                     containerColor = Color.Transparent,
                 ),
                 modifier = Modifier
-                    .fillMaxWidth()
+//                    .fillMaxWidth()
+//                    .width(100.dp)
                     .onFocusChanged { focusState ->
                         isFocused = focusState.isFocused // Update focus state
                     }
