@@ -40,7 +40,9 @@ fun SettingsScreen(navController: NavController){
                 .padding(bottom = 16.dp, top = 32.dp)
             .align(Alignment.CenterHorizontally)
         )
+
         Spacer(modifier = Modifier.height(8.dp))
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -76,5 +78,45 @@ fun SettingsScreen(navController: NavController){
                 )
             }
         }
+
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 96.dp, bottom = 8.dp)
+                .clickable {
+                    navController.navigate("import_export_db")
+                },
+            shape = RoundedCornerShape(topStart = 16.dp, bottomStart = 16.dp, topEnd = 0.dp, bottomEnd = 0.dp),
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 8.dp
+            ),
+            colors = CardDefaults.cardColors(containerColor = Color(0xFF74CCF4))
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = "Import/Export Database",
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                )
+
+                Spacer(modifier = Modifier.width(4.dp))
+
+                Text(
+                    text = "Share the Database to other device",
+                    style = MaterialTheme.typography.bodySmall.copy(
+                        color = Color.Gray,
+                        fontSize = 14.sp
+                    )
+                )
+            }
+        }
+
+
+
     }
 }

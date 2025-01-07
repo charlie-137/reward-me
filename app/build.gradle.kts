@@ -74,6 +74,9 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:1.7.6")
 
 
+    implementation("com.google.code.gson:gson:2.10.1")
+
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

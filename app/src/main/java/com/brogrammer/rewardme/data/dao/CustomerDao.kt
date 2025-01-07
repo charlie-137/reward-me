@@ -32,5 +32,7 @@ interface CustomerDao {
     @Query("SELECT points FROM customers WHERE id = :customerId")
     fun getPointsByCustomerId(customerId: Int): LiveData<Int>
 
+    @Query("SELECT * FROM customers")
+    suspend fun getAllCustomersList(): List<Customer>
 
 }

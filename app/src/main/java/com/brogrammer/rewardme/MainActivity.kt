@@ -29,6 +29,7 @@ import com.brogrammer.rewardme.ui.customerdetails.CashOutScreen
 import com.brogrammer.rewardme.ui.home.HomeScreen
 import com.brogrammer.rewardme.ui.report.ReportScreen
 import com.brogrammer.rewardme.ui.settings.ConversionRatesScreen
+import com.brogrammer.rewardme.ui.settings.ImportExportScreen
 import com.brogrammer.rewardme.ui.settings.SettingsScreen
 import com.brogrammer.rewardme.ui.theme.RewardMeTheme
 
@@ -97,6 +98,7 @@ fun Navigation(navController: NavHostController) {
 
         composable("settings") { SettingsScreen(navController = navController) }
         composable("conversion_rates") { ConversionRatesScreen(navController = navController) }
+        composable("import_export_db") { ImportExportScreen(navController = navController) }
 
 
     }
