@@ -14,6 +14,9 @@ interface ConversionRateDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertConversionRate(conversionRate: ConversionRate)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertConversionRates(conversionRates: List<ConversionRate>)
+
     @Query("SELECT * FROM conversion_rate")
     fun getAllConversionRate(): LiveData<List<ConversionRate>>
 

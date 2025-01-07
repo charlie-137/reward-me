@@ -15,6 +15,9 @@ interface TransactionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: Transaction)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTransactions(transactions: List<Transaction>)
+
     @Query("SELECT * FROM transactions")
     fun getAllTransactions(): LiveData<List<Transaction>>
 

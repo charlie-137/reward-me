@@ -204,6 +204,7 @@ import com.brogrammer.rewardme.data.model.ConversionRate
 import com.brogrammer.rewardme.data.model.Customer
 import com.brogrammer.rewardme.data.model.Transaction
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -260,6 +261,40 @@ suspend fun exportDatabaseToJson(context: Context) {
 
 //        context.startActivity(Intent.createChooser(intent, "Share Database"))
         context.startActivity(appChooser)
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+}
+
+
+
+suspend fun importDatabaseFromJson(context: Context, uri: Uri) {
+    val customerDao = AppDatabase.getDatabase(context).customerDao()
+    val transactionDao = AppDatabase.getDatabase(context).transactionDao()
+    val conversionRateDao = AppDatabase.getDatabase(context).conversionRateDao()
+
+    try {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        val jsonData = inputStream?.bufferedReader().use { it?.readText() }
+
+        val gson = Gson()
+        val dbDataType = object : TypeToken<Map<String, Any>>() {}.type
+        val dbData: Map<String, Any> = gson.fromJson(jsonData, dbDataType)
+
+        val customersJson = gson.toJson(dbData["customers"])
+        val transactionsJson = gson.toJson(dbData["transactions"])
+        val conversionRateJson = gson.toJson(dbData["conversionRate"])
+
+        val customers: List<Customer> = gson.fromJson(customersJson, object : TypeToken<List<Customer>>() {}.type)
+        val transactions: List<Transaction> = gson.fromJson(transactionsJson, object : TypeToken<List<Transaction>>() {}.type)
+        val conversionRates: List<ConversionRate> = gson.fromJson(conversionRateJson, object : TypeToken<List<ConversionRate>>() {}.type)
+
+        withContext(Dispatchers.IO) {
+            customerDao.insertCustomers(customers)
+            transactionDao.insertTransactions(transactions)
+            conversionRateDao.insertConversionRates(conversionRates)
+        }
+
     } catch (e: IOException) {
         e.printStackTrace()
     }
